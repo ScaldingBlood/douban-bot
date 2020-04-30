@@ -65,8 +65,8 @@ class Spider:
         try:
             img_url = soup.select(".captcha_image")[0]['src']
             pic_id = soup.select("input[name=captcha-id]")[0]['value']
-        except:
-            print("no verify img")
+        except Exception as e:
+            print("e")
         return img_url, pic_id
 
     def check_posts(self):
