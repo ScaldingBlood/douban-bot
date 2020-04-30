@@ -2,6 +2,10 @@ import requests
 from verifier import util, verify
 from bs4 import BeautifulSoup
 from config import define
+from crawler.login_util import login
+import random
+import socket
+import struct
 
 
 class Spider:
@@ -12,6 +16,7 @@ class Spider:
         self.session = requests.Session()
         self.headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
+            "Connection": "keep-alive",
         }
 
     # def login(self, name, pwd):
@@ -38,8 +43,9 @@ class Spider:
     #     print(jar.get('dbcl2'))
     #     self.dbcl = jar.get('dbcl2')
 
-    def comment(self, url, content):
+    def comment(self, url):
         img_url, img_id = self.get_verify_code_img(url)
+        print("img_url:", img_url)
 
         verify_code = ""
         if len(img_url) > 0:
@@ -48,13 +54,14 @@ class Spider:
 
         comment_url = url + "add_comment"
         self.session.cookies.set_cookie(requests.cookies.create_cookie(domain='.douban.com', name='dbcl2',
-                                                            value=self.dbcl))
+                                                                       value=self.dbcl))
         self.session.cookies.set_cookie(requests.cookies.create_cookie(domain='.domain.com', name='ck',
-                                                            value=self.ck))
-        data = {"ck": self.ck, "rv_comment": content, "submit_btn": "发送", "start": 0, "captcha-solution": verify_code, "captcha-id": img_id}
+                                                                       value=self.ck))
+        content = random.choice(define.RESP_CONTENT)
+        data = {"ck": self.ck, "rv_comment": content, "submit_btn": "发送", "start": 0, "captcha-solution": verify_code,
+                "captcha-id": img_id}
         resp = self.session.post(comment_url, headers=self.headers, data=data)
         print(resp.text)
-        print(resp)
         return url
 
     def get_verify_code_img(self, url):
@@ -66,11 +73,14 @@ class Spider:
             img_url = soup.select(".captcha_image")[0]['src']
             pic_id = soup.select("input[name=captcha-id]")[0]['value']
         except Exception as e:
-            print("e")
+            print(e)
         return img_url, pic_id
 
-    def check_posts(self):
-        resp = requests.get(define.GROUP_URL, headers=self.headers)
+    def check_posts(self, ip):
+        pro = {
+            "http": "http://" + ip,
+        }
+        resp = requests.get(define.GROUP_URL, proxies=pro, headers=self.headers)
         soup = BeautifulSoup(resp.text, "lxml")
         items = soup.select(".olt tr")
 

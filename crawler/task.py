@@ -5,11 +5,10 @@ import threading
 class TaskManager:
     # _local = threading.local()
 
-    def __init__(self, post_utils, pool, comment):
+    def __init__(self, post_utils, pool):
         # TaskManager._local.urls = dict()
         self.post_utils = post_utils
         self.pool = pool
-        self.comment = comment
         self.processing = {}
 
     def run(self, urls):
@@ -19,7 +18,7 @@ class TaskManager:
             # if url not in TaskManager._local.urls.keys():
             if url not in self.processing:
                 # TaskManager._local.urls[url] = True
-                self.pool.submit(Spider.comment, self.post_utils, url, self.comment)
+                self.pool.submit(Spider.comment, self.post_utils, url)
                 # .add_done_callback(TaskManager.clean_callback)
         self.processing = processing
 

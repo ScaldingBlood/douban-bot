@@ -1,22 +1,25 @@
 from crawler.spider import Spider
 from crawler.login_util import login
 from crawler.task import TaskManager
+from crawler.ip_util import IPUpdater
 from concurrent.futures import ThreadPoolExecutor
 import time
 from config import define
 import random
 
 if __name__ == '__main__':
+    ipUpdater = IPUpdater()
+    ipUpdater.sched_update_ip()
 
     dbcl, ck = login(define.USER_NAME, define.PASSWORD)
+    # dbcl, ck = None, None
     spider = Spider(dbcl, ck)
 
     pool = ThreadPoolExecutor(8)
-    comment = define.RESP_CONTENT[random.randint(0, len(define.RESP_CONTENT))]
-    tm = TaskManager(spider, pool, comment)
+    tm = TaskManager(spider, pool)
 
     while True:
-        urls = spider.check_posts()
+        urls = spider.check_posts(ipUpdater.select())
         print(urls)
         tm.run(urls)
         time.sleep(define.INTERVAL)
