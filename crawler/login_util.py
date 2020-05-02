@@ -23,5 +23,7 @@ def login(name, pwd):
             dbcl = c['value']
         elif c['name'] == 'ck':
             ck = c['value']
+        elif c['name'] == 'bid':
+            bid = c['value']
 
-    return dbcl, ck
+    return dbcl, ck, bid
