@@ -5,15 +5,14 @@ from crawler.ip_util import IPUpdater
 from concurrent.futures import ThreadPoolExecutor
 import time
 from config import define
-import random
 
 if __name__ == '__main__':
     ipUpdater = IPUpdater()
     ipUpdater.sched_update_ip()
 
-    dbcl, ck = login(define.USER_NAME, define.PASSWORD)
+    dbcl, ck, bid = login(define.USER_NAME, define.PASSWORD)
     # dbcl, ck = None, None
-    spider = Spider(dbcl, ck)
+    spider = Spider(dbcl, ck, bid)
 
     pool = ThreadPoolExecutor(8)
     tm = TaskManager(spider, pool)

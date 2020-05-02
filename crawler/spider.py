@@ -2,17 +2,15 @@ import requests
 from verifier import util, verify
 from bs4 import BeautifulSoup
 from config import define
-from crawler.login_util import login
 import random
-import socket
-import struct
 
 
 class Spider:
 
-    def __init__(self, dbcl, ck):
+    def __init__(self, dbcl, ck, bid):
         self.ck = ck
         self.dbcl = dbcl
+        self.bid = bid
         self.session = requests.Session()
         self.headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
@@ -53,10 +51,12 @@ class Spider:
             verify_code = verify.get_word_in_pic(pic_path)
 
         comment_url = url + "add_comment"
-        self.session.cookies.set_cookie(requests.cookies.create_cookie(domain='.douban.com', name='dbcl2',
-                                                                       value=self.dbcl))
-        self.session.cookies.set_cookie(requests.cookies.create_cookie(domain='.domain.com', name='ck',
-                                                                       value=self.ck))
+        self.session.cookies.set_cookie(
+            requests.cookies.create_cookie(domain='.douban.com', name='dbcl2', value=self.dbcl))
+        self.session.cookies.set_cookie(
+            requests.cookies.create_cookie(domain='.domain.com', name='ck', value=self.ck))
+        self.session.cookies.set_cookie(
+            requests.cookies.create_cookie(domain='.domain.com', name='bid', value=self.bid))
         content = random.choice(define.RESP_CONTENT)
         data = {"ck": self.ck, "rv_comment": content, "submit_btn": "发送", "start": 0, "captcha-solution": verify_code,
                 "captcha-id": img_id}
@@ -78,9 +78,11 @@ class Spider:
 
     def check_posts(self, ip):
         pro = {
-            "http": "http://" + ip,
+            "https": "https://" + ip,
         }
         resp = requests.get(define.GROUP_URL, proxies=pro, headers=self.headers)
+        if resp.status_code != 200:
+            print(resp.text)
         soup = BeautifulSoup(resp.text, "lxml")
         items = soup.select(".olt tr")
 
