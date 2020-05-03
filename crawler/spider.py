@@ -77,9 +77,9 @@ class Spider:
         return img_url, pic_id
 
     def check_posts(self, ip):
-        pro = {
-            "https": "https://" + ip,
-        }
+        # pro = {
+        #     "https": "https://" + ip,
+        # }
         try:
             # resp = requests.get(define.GROUP_URL, proxies=pro, verify=False, headers=self.headers, timeout=10)
             resp = requests.get(define.GROUP_URL, headers=self.headers, timeout=10)
