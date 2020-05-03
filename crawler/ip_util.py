@@ -40,6 +40,8 @@ class IPUpdater:
                 r = requests.get(define.GROUP_URL, headers=headers, verify=False, proxies=proxies, timeout=10)
                 if r.status_code == 200:
                     self.ips.append(ip)
+                    if len(self.ips) > 9:
+                        break
             except:
                 pass
         print(self.ips)
