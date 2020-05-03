@@ -18,7 +18,10 @@ if __name__ == '__main__':
     tm = TaskManager(spider, pool)
 
     while True:
-        urls = spider.check_posts(ipUpdater.select())
+        while True:
+            urls = spider.check_posts(ipUpdater.select())
+            if urls is not None:
+                break
         print(urls)
         tm.run(urls)
         time.sleep(define.INTERVAL)
