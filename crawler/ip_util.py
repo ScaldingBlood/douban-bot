@@ -23,18 +23,17 @@ class IPUpdater:
         headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
         }
-        pages = ["b97827cc", "4ce63706", "5crfe930", "f3k1d581", "ce1d45977"]
+        pages = [1]
         ips = []
         for page in pages:
-            resp = requests.get("https://ip.ihuan.me/address/5Lit5Zu9.html?page=" + page, headers=headers)
+            resp = requests.get("https://www.xicidaili.com/wn/" + str(page), headers=headers)
             soup = BeautifulSoup(resp.text, "lxml")
-            trs = soup.select("div.table-responsive > table > tbody > tr")
+            trs = soup.select(".odd")
             for tr in trs:
                 tds = tr.select("td")
-                if tds[4].text == '支持' and tds[5].text == '支持':
-                    ip = tds[0].text + ":" + tds[1].text
-                    if len(ip) > 1:
-                        ips.append(ip)
+                ip = tds[1].text + ":" + tds[2].text
+                if len(ip) > 1:
+                    ips.append(ip)
         for ip in ips:
             proxies = {"https": ip}
             try:
