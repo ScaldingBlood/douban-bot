@@ -31,9 +31,10 @@ class IPUpdater:
             trs = soup.select("div.table-responsive > table > tbody > tr")
             for tr in trs:
                 tds = tr.select("td")
-                ip = tds[0].text + ":" + tds[1].text
-                if len(ip) > 1:
-                    ips.append(ip)
+                if tds[4].text == '支持' and tds[5].text == '支持':
+                    ip = tds[0].text + ":" + tds[1].text
+                    if len(ip) > 1:
+                        ips.append(ip)
         for ip in ips:
             proxies = {"https": ip}
             try:
