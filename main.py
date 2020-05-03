@@ -8,7 +8,7 @@ from config import define
 
 if __name__ == '__main__':
     ipUpdater = IPUpdater()
-    ipUpdater.sched_update_ip()
+    # ipUpdater.sched_update_ip()
 
     dbcl, ck, bid = login(define.USER_NAME, define.PASSWORD)
     # dbcl, ck = None, None

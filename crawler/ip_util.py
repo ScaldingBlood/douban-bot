@@ -48,6 +48,8 @@ class IPUpdater:
         self.schedler.enter(define.IP_UPDATE_INTERVAL, 0, self.update_ip)
 
     def select(self):
+        if len(self.ips) == 0:
+            return None
         return random.choice(self.ips)
 
 
