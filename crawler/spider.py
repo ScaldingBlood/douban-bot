@@ -81,7 +81,8 @@ class Spider:
             "https": "https://" + ip,
         }
         try:
-            resp = requests.get(define.GROUP_URL, proxies=pro, verify=False, headers=self.headers, timeout=10)
+            # resp = requests.get(define.GROUP_URL, proxies=pro, verify=False, headers=self.headers, timeout=10)
+            resp = requests.get(define.GROUP_URL, headers=self.headers, timeout=10)
         except:
             print("https proxy failed")
             return

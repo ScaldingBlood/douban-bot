@@ -18,6 +18,7 @@ def login(name, pwd):
 
     dbcl = None
     ck = None
+    bid = None
     for c in cookies:
         if c['name'] == 'dbcl2':
             dbcl = c['value']
