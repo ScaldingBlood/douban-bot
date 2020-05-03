@@ -80,7 +80,7 @@ class Spider:
         pro = {
             "https": "https://" + ip,
         }
-        resp = requests.get(define.GROUP_URL, proxies=pro, headers=self.headers)
+        resp = requests.get(define.GROUP_URL, proxies=pro, verify=False, headers=self.headers, timeout=10)
         if resp.status_code != 200:
             print(resp.text)
         soup = BeautifulSoup(resp.text, "lxml")

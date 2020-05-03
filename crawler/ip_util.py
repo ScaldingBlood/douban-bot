@@ -34,7 +34,11 @@ class IPUpdater:
                 ip = tds[0].text + ":" + tds[1].text
                 if len(ip) > 1:
                     ips.append(ip)
-        self.ips = ips
+        for ip in ips:
+            proxies = {"https": ip}
+            r = requests.get(define.GROUP_URL, headers=headers, verify=False, proxies=proxies, timeout=10)
+            if r.status_code == 200:
+                self.ips.append(ip)
         self.schedler.enter(define.IP_UPDATE_INTERVAL, 0, self.update_ip)
 
     def select(self):
