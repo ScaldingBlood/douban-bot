@@ -26,21 +26,22 @@ class IPUpdater:
         pages = [1]
         ips = []
         for page in pages:
-            resp = requests.get("https://www.xicidaili.com/wn/" + str(page), headers=headers)
+            resp = requests.get("https://www.xicidaili.com/nn/" + str(page), headers=headers)
             soup = BeautifulSoup(resp.text, "lxml")
             trs = soup.select(".odd")
             for tr in trs:
                 tds = tr.select("td")
-                ip = tds[1].text + ":" + tds[2].text
-                if len(ip) > 1:
-                    ips.append(ip)
+                if tds[5] == "HTTPS":
+                    ip = tds[1].text + ":" + tds[2].text
+                    if len(ip) > 1:
+                        ips.append(ip)
         for ip in ips:
             proxies = {"https": ip}
             try:
                 r = requests.get(define.GROUP_URL, headers=headers, verify=False, proxies=proxies, timeout=10)
                 if r.status_code == 200:
                     self.ips.append(ip)
-                    if len(self.ips) > 9:
+                    if len(self.ips) > 19:
                         break
             except:
                 pass
