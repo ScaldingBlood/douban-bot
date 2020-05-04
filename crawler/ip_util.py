@@ -31,7 +31,7 @@ class IPUpdater:
             trs = soup.select(".odd")
             for tr in trs:
                 tds = tr.select("td")
-                if tds[5] == "HTTPS":
+                if tds[5].text == "HTTPS":
                     ip = tds[1].text + ":" + tds[2].text
                     if len(ip) > 1:
                         ips.append(ip)
