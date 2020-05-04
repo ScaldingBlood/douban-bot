@@ -23,29 +23,30 @@ class IPUpdater:
         headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
         }
-        pages = [1]
+        pages = ["b97827cc", "4ce63706"]
         ips = []
         for page in pages:
-            resp = requests.get("https://www.xicidaili.com/nn/" + str(page), headers=headers)
+            resp = requests.get("https://ip.ihuan.me/address/5Lit5Zu9.html?page=" + page, headers=headers)
             soup = BeautifulSoup(resp.text, "lxml")
-            trs = soup.select(".odd")
+            trs = soup.select("div.table-responsive > table > tbody > tr")
             for tr in trs:
                 tds = tr.select("td")
-                if tds[5].text == "HTTPS":
-                    ip = tds[1].text + ":" + tds[2].text
+                if tds[4].text == "支持":
+                    ip = tds[0].text + ":" + tds[1].text
                     if len(ip) > 1:
                         ips.append(ip)
         for ip in ips:
-            proxies = {"https": ip}
+            proxies = {"https": "https://" + ip}
             try:
                 r = requests.get(define.GROUP_URL, headers=headers, verify=False, proxies=proxies, timeout=10)
                 if r.status_code == 200:
                     self.ips.append(ip)
                     if len(self.ips) > 19:
                         break
-            except:
+            except Exception as err:
+                print(err)
                 pass
-        print(self.ips)
+        print("ips", self.ips)
         self.schedler.enter(define.IP_UPDATE_INTERVAL, 0, self.update_ip)
 
     def select(self):
