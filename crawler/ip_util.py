@@ -23,7 +23,7 @@ class IPUpdater:
         headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
         }
-        pages = ["b97827cc", "4ce63706"]
+        pages = ["b97827cc", "4ce63706", "5crfe930", "f3k1d581", "ce1d45977"]
         ips = []
         for page in pages:
             resp = requests.get("https://ip.ihuan.me/address/5Lit5Zu9.html?page=" + page, headers=headers)
